@@ -1,0 +1,98 @@
+/* Login Page Styles */
+
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated Background Elements */
+.login-page::before {
+    content: '⭐';
+    position: absolute;
+    font-size: 100px;
+    top: 10%;
+    left: 10%;
+    animation: float 6s ease-in-out infinite;
+    opacity: 0.3;
+}
+
+.login-page::after {
+    content: '🎈';
+    position: absolute;
+    font-size: 120px;
+    bottom: 10%;
+    right: 10%;
+    animation: float 8s ease-in-out infinite;
+    opacity: 0.3;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(10deg); }
+}
+
+.login-box {
+    background: white;
+    border-radius: 40px;
+    padding: 50px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    z-index: 10;
+}
+
+.logo h1 {
+    font-size: 48px;
+    text-align: center;
+    background: linear-gradient(135deg, #FF6B6B, #4ECDC4, #FFE66D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    animation: rainbow 5s infinite;
+}
+
+.tagline {
+    text-align: center;
+    font-size: 20px;
+    color: #666;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.auth-form {
+    margin-top: 30px;
+}
+
+.auth-form h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+.auth-form .btn {
+    width: 100%;
+    margin: 10px 0;
+}
+
+/* Responsive Login */
+@media (max-width: 768px) {
+    .login-box {
+        padding: 30px 20px;
+    }
+    
+    .logo h1 {
+        font-size: 36px;
+    }
+    
+    .tagline {
+        font-size: 16px;
+    }
+}

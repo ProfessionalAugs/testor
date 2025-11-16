@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kido Quest - Learning Adventure</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="login-page">
+    <div class="container">
+        <div class="login-box">
+            <div class="logo">
+                <h1>🎮 KIDO QUEST 🎮</h1>
+                <p class="tagline">Learning with Fun!</p>
+            </div>
+
+            <!-- Parent Login Form -->
+            <div id="parent-login" class="auth-form">
+                <h2>Parent Login</h2>
+                <input type="email" id="parent-email" placeholder="Email" class="input-field">
+                <input type="password" id="parent-password" placeholder="Password" class="input-field">
+                <button onclick="parentLogin()" class="btn btn-primary">Login</button>
+                <button onclick="showSignup()" class="btn btn-secondary">Create Account</button>
+                <button onclick="guestMode()" class="btn btn-ghost">Guest Mode</button>
+            </div>
+
+            <!-- Parent Signup Form -->
+            <div id="parent-signup" class="auth-form" style="display:none;">
+                <h2>Create Parent Account</h2>
+                <input type="text" id="signup-name" placeholder="Your Name" class="input-field">
+                <input type="email" id="signup-email" placeholder="Email" class="input-field">
+                <input type="password" id="signup-password" placeholder="Password (min 6 chars)" class="input-field">
+                <input type="password" id="signup-confirm" placeholder="Confirm Password" class="input-field">
+                <button onclick="parentSignup()" class="btn btn-primary">Create Account</button>
+                <button onclick="showLogin()" class="btn btn-secondary">Back to Login</button>
+            </div>
+
+            <div class="error-message" id="error-msg"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

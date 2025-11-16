@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter Pop - Kido Quest</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .game-header {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            padding: 20px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .game-area {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .target-letter {
+            font-size: 80px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+        
+        .letters-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .letter-bubble {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            padding: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .letter-bubble:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .letter-bubble.correct {
+            background: linear-gradient(135deg, #95E1D3, #44A08D);
+            animation: pop 0.3s ease;
+        }
+        
+        .letter-bubble.wrong {
+            background: linear-gradient(135deg, #F38181, #C94B4B);
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        .game-over {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-over-content {
+            background: white;
+            padding: 50px;
+            border-radius: 40px;
+            text-align: center;
+        }
+        
+        .final-score {
+            font-size: 60px;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <button onclick="goHome()" class="btn btn-ghost" style="float:left;">← Back</button>
+            <h1 style="margin:0;">🎯 Letter Pop Game 🎯</h1>
+            <div class="score-board">
+                <div>Score: <span id="score">0</span></div>
+                <div>Lives: <span id="lives">❤️❤️❤️</span></div>
+                <div>Time: <span id="timer">60</span>s</div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <h2>Find the letter:</h2>
+            <div class="target-letter pulse" id="target-letter">A</div>
+            
+            <div class="letters-grid" id="letters-grid">
+                <!-- Letters will be generated here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Game Over Screen -->
+    <div class="game-over" id="game-over">
+        <div class="game-over-content">
+            <h1>🎉 Game Over! 🎉</h1>
+            <div class="final-score" id="final-score">0</div>
+            <p style="font-size:24px; margin:20px 0;">Great job!</p>
+            <button onclick="restartGame()" class="btn btn-primary btn-large">Play Again</button>
+            <button onclick="goHome()" class="btn btn-secondary btn-large">Home</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/tts-engine.js"></script>
+    <script>
+        let score = 0;
+        let lives = 3;
+        let timeLeft = 60;
+        let currentTarget = '';
+        let gameTimer;
+        
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        
+        // Initialize game
+        function initGame() {
+            score = 0;
+            lives = 3;
+            timeLeft = 60;
+            updateDisplay();
+            generateNewRound();
+            startTimer();
+            speak('Find the letters! Good luck!');
+        }
+        
+        // Generate new round
+        function generateNewRound() {
+            currentTarget = alphabet[Math.floor(Math.random() * alphabet.length)];
+            document.getElementById('target-letter').textContent = currentTarget;
+            speak('Find ' + currentTarget);
+            
+            const grid = document.getElementById('letters-grid');
+            grid.innerHTML = '';
+            
+            // Generate 15 letters including 1-3 target letters
+            const targetCount = Math.floor(Math.random() * 3) + 1;
+            const letters = [];
+            
+            for (let i = 0; i < targetCount; i++) {
+                letters.push(currentTarget);
+            }
+            
+            while (letters.length < 15) {
+                const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                if (randomLetter !== currentTarget) {
+                    letters.push(randomLetter);
+                }
+            }
+            
+            shuffle(letters);
+            
+            letters.forEach(letter => {
+                const bubble = document.createElement('div');
+                bubble.className = 'letter-bubble';
+                bubble.textContent = letter;
+                bubble.onclick = () => checkLetter(letter, bubble);
+                grid.appendChild(bubble);
+            });
+        }
+        
+        // Check if clicked letter is correct
+        function checkLetter(letter, bubble) {
+            if (letter === currentTarget) {
+                bubble.classList.add('correct');
+                score += 10;
+                playSound('correct');
+                speak('Correct!');
+                
+                setTimeout(() => {
+                    bubble.style.display = 'none';
+                    checkRoundComplete();
+                }, 300);
+            } else {
+                bubble.classList.add('wrong');
+                lives--;
+                playSound('wrong');
+                speak('Try again!');
+                
+                setTimeout(() => {
+                    bubble.classList.remove('wrong');
+                }, 500);
+                
+                if (lives <= 0) {
+                    endGame();
+                }
+            }
+            
+            updateDisplay();
+        }
+        
+        // Check if round is complete
+        function checkRoundComplete() {
+            const remaining = document.querySelectorAll('.letter-bubble:not(.correct)');
+            const hasTarget = Array.from(remaining).some(b => b.textContent === currentTarget);
+            
+            if (!hasTarget) {
+                setTimeout(generateNewRound, 500);
+            }
+        }
+        
+        // Start countdown timer
+        function startTimer() {
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+        
+        // Update display
+        function updateDisplay() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = '❤️'.repeat(lives);
+        }
+        
+        // End game
+        function endGame() {
+            clearInterval(gameTimer);
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('game-over').style.display = 'flex';
+            
+            saveGameScore('letter-pop', score);
+            
+            if (score > 100) {
+                speak('Amazing! You scored ' + score + ' points!');
+            } else if (score > 50) {
+                speak('Good job! You scored ' + score + ' points!');
+            } else {
+                speak('You scored ' + score + ' points! Try again!');
+            }
+        }
+        
+        // Restart game
+        function restartGame() {
+            document.getElementById('game-over').style.display = 'none';
+            initGame();
+        }
+        
+        // Save score
+        async function saveGameScore(game, score) {
+            try {
+                const profile = JSON.parse(localStorage.getItem('childProfile') || '{}');
+                const user = firebase.auth().currentUser;
+                
+                if (!user) return;
+                
+                await db.collection('leaderboard').add({
+                    userId: user.uid,
+                    childName: profile.name,
+                    game: game,
+                    score: score,
+                    date: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error('Error saving score:', error);
+            }
+        }
+        
+        // Utility functions
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        function goHome() {
+            clearInterval(gameTimer);
+            window.location.href = '../home.html';
+        }
+        
+        function playSound(type) {
+            const audio = new Audio(`../assets/audio/sfx/${type}.mp3`);
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log('Audio failed'));
+        }
+        
+        // Start game on load
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>

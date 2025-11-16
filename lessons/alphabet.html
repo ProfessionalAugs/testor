@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Alphabet - Kido Quest</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/lessons.css">
+</head>
+<body>
+    <div class="lesson-header">
+        <button onclick="goHome()" class="btn btn-ghost back-btn">← Back</button>
+        <h1 class="lesson-title bounce">🔤 Learn ABC 🔤</h1>
+    </div>
+
+    <div class="container">
+        <div class="lesson-container">
+            <!-- Current Letter Display -->
+            <div class="letter-display" id="letter-display">
+                <div class="big-letter" id="big-letter">A</div>
+                <div class="letter-word" id="letter-word">for Apple</div>
+                <div class="letter-image">🍎</div>
+            </div>
+
+            <!-- Controls -->
+            <div class="lesson-controls">
+                <button onclick="previousLetter()" class="btn btn-secondary btn-large">⏮ Previous</button>
+                <button onclick="speakCurrentLetter()" class="btn btn-primary btn-large pulse">🔊 Say It!</button>
+                <button onclick="nextLetter()" class="btn btn-secondary btn-large">Next ⏭</button>
+            </div>
+
+            <div class="lesson-controls">
+                <button onclick="spellWord()" class="btn btn-accent">✨ Spell Word</button>
+                <button onclick="playSlowly()" class="btn btn-accent">🐢 Slow Mode</button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <div class="progress-text" id="progress-text">Letter 1 of 26</div>
+            </div>
+
+            <!-- Alphabet Grid (Visual Reference) -->
+            <div class="alphabet-grid">
+                <button onclick="jumpToLetter(0)" class="letter-btn">A</button>
+                <button onclick="jumpToLetter(1)" class="letter-btn">B</button>
+                <button onclick="jumpToLetter(2)" class="letter-btn">C</button>
+                <button onclick="jumpToLetter(3)" class="letter-btn">D</button>
+                <button onclick="jumpToLetter(4)" class="letter-btn">E</button>
+                <button onclick="jumpToLetter(5)" class="letter-btn">F</button>
+                <button onclick="jumpToLetter(6)" class="letter-btn">G</button>
+                <button onclick="jumpToLetter(7)" class="letter-btn">H</button>
+                <button onclick="jumpToLetter(8)" class="letter-btn">I</button>
+                <button onclick="jumpToLetter(9)" class="letter-btn">J</button>
+                <button onclick="jumpToLetter(10)" class="letter-btn">K</button>
+                <button onclick="jumpToLetter(11)" class="letter-btn">L</button>
+                <button onclick="jumpToLetter(12)" class="letter-btn">M</button>
+                <button onclick="jumpToLetter(13)" class="letter-btn">N</button>
+                <button onclick="jumpToLetter(14)" class="letter-btn">O</button>
+                <button onclick="jumpToLetter(15)" class="letter-btn">P</button>
+                <button onclick="jumpToLetter(16)" class="letter-btn">Q</button>
+                <button onclick="jumpToLetter(17)" class="letter-btn">R</button>
+                <button onclick="jumpToLetter(18)" class="letter-btn">S</button>
+                <button onclick="jumpToLetter(19)" class="letter-btn">T</button>
+                <button onclick="jumpToLetter(20)" class="letter-btn">U</button>
+                <button onclick="jumpToLetter(21)" class="letter-btn">V</button>
+                <button onclick="jumpToLetter(22)" class="letter-btn">W</button>
+                <button onclick="jumpToLetter(23)" class="letter-btn">X</button>
+                <button onclick="jumpToLetter(24)" class="letter-btn">Y</button>
+                <button onclick="jumpToLetter(25)" class="letter-btn">Z</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/tts-engine.js"></script>
+    <script src="../js/lesson-player.js"></script>
+    <script src="../assets/data/alphabet-data.js"></script>
+</body>
+</html>

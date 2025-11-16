@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kido Quest - Home</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .home-header {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            border-radius: 0 0 40px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .profile-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .profile-info h2 {
+            margin: 0;
+            font-size: 32px;
+        }
+        
+        .main-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .nav-card {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #FF6B6B, #4ECDC4, #FFE66D);
+        }
+        
+        .nav-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .nav-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .nav-desc {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .voice-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.5);
+            z-index: 100;
+        }
+        
+        .voice-control:hover {
+            transform: scale(1.1);
+        }
+        
+        .voice-control.listening {
+            animation: pulse 1s infinite;
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+        }
+        
+        .settings-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="home-header">
+        <div class="profile-display">
+            <div class="profile-avatar" id="current-avatar">🦁</div>
+            <div class="profile-info">
+                <h2 id="child-name">Loading...</h2>
+            </div>
+        </div>
+        <button onclick="changeProfile()" class="btn btn-ghost" style="font-size:16px;">Switch Profile</button>
+    </div>
+
+    <div class="container">
+        <div class="main-nav">
+            <!-- Lessons -->
+            <div class="nav-card" onclick="navigate('lessons/alphabet.html')">
+                <span class="nav-icon bounce">📚</span>
+                <div class="nav-title">Learn ABC</div>
+                <div class="nav-desc">Letters & Words</div>
+            </div>
+
+            <!-- Numbers -->
+            <div class="nav-card" onclick="navigate('lessons/counting.html')">
+                <span class="nav-icon bounce">🔢</span>
+                <div class="nav-title">Count 1-10</div>
+                <div class="nav-desc">Numbers & Counting</div>
+            </div>
+
+            <!-- Animals -->
+            <div class="nav-card" onclick="navigate('lessons/animals.html')">
+                <span class="nav-icon bounce">🦁</span>
+                <div class="nav-title">Animals</div>
+                <div class="nav-desc">Learn Animal Names</div>
+            </div>
+
+            <!-- Birds -->
+            <div class="nav-card" onclick="navigate('lessons/birds.html')">
+                <span class="nav-icon bounce">🦜</span>
+                <div class="nav-title">Birds</div>
+                <div class="nav-desc">Colorful Bird Friends</div>
+            </div>
+
+            <!-- Games -->
+            <div class="nav-card" onclick="navigate('games/letter-pop.html')">
+                <span class="nav-icon bounce">🎮</span>
+                <div class="nav-title">Play Games</div>
+                <div class="nav-desc">Fun Learning Games</div>
+            </div>
+
+            <!-- Chat -->
+            <div class="nav-card" onclick="navigate('chat.html')">
+                <span class="nav-icon bounce">💬</span>
+                <div class="nav-title">Talk to AI</div>
+                <div class="nav-desc">Chat with Friend</div>
+            </div>
+
+            <!-- Safety (Parent-Gated) -->
+            <div class="nav-card" onclick="navigate('lessons/safety.html')">
+                <span class="nav-icon">🛡️</span>
+                <div class="nav-title">Safety Tips</div>
+                <div class="nav-desc">Good & Bad Touch</div>
+            </div>
+
+            <!-- Progress -->
+            <div class="nav-card" onclick="navigate('progress.html')">
+                <span class="nav-icon">⭐</span>
+                <div class="nav-title">My Progress</div>
+                <div class="nav-desc">Stars & Achievements</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Control Button -->
+    <div class="voice-control" id="voice-btn" onclick="toggleVoice()" title="Voice Commands">
+        🎤
+    </div>
+
+    <!-- Settings -->
+    <button onclick="openSettings()" class="btn btn-secondary settings-btn">⚙️</button>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/tts-engine.js"></script>
+    <script src="js/speech-recognition.js"></script>
+</body>
+</html>

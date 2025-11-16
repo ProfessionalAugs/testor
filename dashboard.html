@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Profile - Kido Quest</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .dashboard {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .welcome {
+            font-size: 42px;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .profile-card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-15px) rotate(3deg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 60px;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .profile-age {
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .add-profile {
+            border: 4px dashed #ccc;
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .add-profile:hover {
+            border-color: var(--primary);
+            background: rgba(255,107,107,0.1);
+        }
+        
+        .add-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="logout()" class="btn btn-ghost logout-btn">Logout</button>
+    
+    <div class="container dashboard">
+        <h1 class="welcome pulse">Who's Playing Today?</h1>
+        
+        <div class="profiles-grid" id="profiles-container">
+            <!-- Profiles will be loaded here -->
+        </div>
+        
+        <button onclick="showCreateProfile()" class="btn btn-accent btn-large bounce">+ Add New Child</button>
+    </div>
+
+    <!-- Create Profile Modal -->
+    <div id="create-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000;">
+        <div class="card" style="max-width:500px; margin:100px auto; position:relative;">
+            <button onclick="closeCreateProfile()" style="position:absolute; top:20px; right:20px; background:none; border:none; font-size:30px; cursor:pointer;">✖</button>
+            
+            <h2 style="text-align:center; color:#333; margin-bottom:30px;">Create Child Profile</h2>
+            
+            <input type="text" id="child-name" placeholder="Child's Name" class="input-field">
+            
+            <select id="child-age" class="input-field">
+                <option value="">Select Age</option>
+                <option value="3">3 years</option>
+                <option value="4">4 years</option>
+                <option value="5">5 years</option>
+            </select>
+            
+            <label style="display:block; margin:20px 0 10px; font-size:18px; font-weight:bold;">Choose Avatar:</label>
+            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:15px;">
+                <div class="avatar" onclick="selectAvatar('🦁')" style="cursor:pointer; width:80px; height:80px; font-size:40px;">🦁</div>
+                <div class="avatar" onclick="selectAvatar('🐼')" style="cursor:pointer; width:80px; height:80px; font-size:40px;">🐼</div>
+                <div class="avatar" onclick="selectAvatar('🐰')" style="cursor:pointer; width:80px; height:80px; font-size:40px;">🐰</div>
+                <div class="avatar" onclick="selectAvatar('🦊')" style="cursor:pointer; width:80px; height:80px; font-size:40px;">🦊</div>
+                <div class="avatar" onclick="selectAvatar('🐶')" style="cursor:pointer; width:80px; height:80px; font-size:40px;">🐶</div>
+                <div class="avatar" onclick="selectAvatar('🐱')" style="cursor:pointer; width:80px; height:80px; font-size:40px;">🐱</div>
+                <div class="avatar" onclick="selectAvatar('🐯')" style="cursor:pointer; width:80px; height:80px; font-size:40px;">🐯</div>
+                <div class="avatar" onclick="selectAvatar('🐻')" style="cursor:pointer; width:80px; height:80px; font-size:40px;">🐻</div>
+            </div>
+            
+            <label style="display:block; margin:20px 0 10px; font-size:18px; font-weight:bold;">Language:</label>
+            <select id="child-language" class="input-field">
+                <option value="en">English</option>
+                <option value="hi">Hindi (हिन्दी)</option>
+                <option value="es">Spanish (Español)</option>
+                <option value="fr">French (Français)</option>
+                <option value="ru">Russian (Русский)</option>
+            </select>
+            
+            <button onclick="createChildProfile()" class="btn btn-primary" style="width:100%; margin-top:20px;">Create Profile</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

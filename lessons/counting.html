@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn to Count - Kido Quest</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/lessons.css">
+</head>
+<body>
+    <div class="lesson-header">
+        <button onclick="goHome()" class="btn btn-ghost back-btn">← Back</button>
+        <h1 class="lesson-title bounce">🔢 Count 1-10 🔢</h1>
+    </div>
+
+    <div class="container">
+        <div class="lesson-container">
+            <!-- Current Number Display -->
+            <div class="number-display" id="number-display">
+                <div class="big-number" id="big-number">1</div>
+                <div class="number-word" id="number-word">One</div>
+                <div class="counting-objects"></div>
+            </div>
+
+            <!-- Controls -->
+            <div class="lesson-controls">
+                <button onclick="previousLetter()" class="btn btn-secondary btn-large">⏮ Previous</button>
+                <button onclick="speakCurrentLetter()" class="btn btn-primary btn-large pulse">🔊 Count!</button>
+                <button onclick="nextLetter()" class="btn btn-secondary btn-large">Next ⏭</button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <div class="progress-text" id="progress-text">Number 1 of 10</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/tts-engine.js"></script>
+    <script src="../js/lesson-player.js"></script>
+    <script src="../assets/data/counting-data.js"></script>
+</body>
+</html>
