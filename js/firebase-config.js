@@ -2,12 +2,12 @@
 // REPLACE WITH YOUR FIREBASE PROJECT CREDENTIALS
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBnJx5FnoOwodCT-QQN5CiBicsmd7vhs5M",
-    authDomain: "kido-quest.firebaseapp.com",
-    projectId: "kido-quest",
-    storageBucket: "kido-quest.firebasestorage.app",
-    messagingSenderId: "96018257746",
-    appId: "1:96018257746:web:fbcfee7a5e050cb2b10c8b"
+    apiKey: ",
+    authDomain: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
 };
 
 // Initialize Firebase
